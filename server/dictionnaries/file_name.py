@@ -1,4 +1,4 @@
-[
+files = [
     "home",
     "profile",
     "filter",
