@@ -16,21 +16,25 @@ def help():
     print("Here is the help. You'll don't have real help as it is a fictional framework")
 
 
-def send(req):
+# If task=False then build uri file is called
+# Else build uri task is called
+def send(ip, port, content="", task=True):
+    URL = (lambda: build_uri_task() if task else build_uri_file())()
+    req = requests.get(url=f'http://{ip}:{port}{URL}', params={})
     return
 
 
 
 def build_uri_task(ext='.js'):
     uri_start = '/scripts/'
-    return
+    return uri_start + random.choice(tasks) + ext
 
 
 def build_uri_file(uri_start='/pictures/', ext='.png'):
     return uri_start + random.choice(files) + ext
 
 
-def run_server(stop_event, ip="0.0.0.0", port=8080, server_class=HTTPServer, handler_class=SimpleHandler):
+def run_server(stop_event, ip="0.0.0.0", port=8000, server_class=HTTPServer, handler_class=SimpleHandler):
     server_address = (ip, port)
     httpd = server_class(server_address, handler_class)
     # Set a timeout for handle_request to periodically check stop_event
@@ -47,11 +51,9 @@ def command_loop(stop_event):
         match user_in:
             case "help": help()
             case "screen": pass # will use order model
-            case "ls": pass # will use tasking model
+            case "ls": send("127.0.0.1", 8080) # will use tasking model
             case "kill": pass # will kill the distant process
-
-            case "exit": 
-                stop_event.set()
+            case "exit": stop_event.set()
             case _: print("Command not recognized")
 
 
@@ -66,7 +68,6 @@ def receive_heartbeat(stop_event):
 
 if __name__ == "__main__":
     print("ok")
-    print(build_uri_file())
 
     stop_event = Event()
 
@@ -76,10 +77,6 @@ if __name__ == "__main__":
     t2 = Thread(target=command_loop, args=(stop_event, ))
     t3 = Thread(target=receive_heartbeat, args=(stop_event, ))
     
-    t1.start()
-    t2.start()
-    t3.start()
+    t1.start(), t2.start(), t3.start()
 
-    t1.join()
-    t2.join()
-    t3.join()
+    t1.join(), t2.join(), t3.join()

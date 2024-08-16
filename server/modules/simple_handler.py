@@ -14,3 +14,6 @@ class SimpleHandler(BaseHTTPRequestHandler):
 
     def do_PUT(self):
         pass
+
+    def do_DELETE(self):
+        pass

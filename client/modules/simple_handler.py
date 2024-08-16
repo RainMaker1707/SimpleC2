@@ -3,10 +3,16 @@ from http.server import BaseHTTPRequestHandler
 
 class SimpleHandler(BaseHTTPRequestHandler):
     def do_GET(self):
-        pass
-        
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write(b"<html><body><h1>Success</h1></body></html>")
+
     def do_POST(self):
         pass
 
     def do_PUT(self):
+        pass
+
+    def do_DELETE(self):
         pass
