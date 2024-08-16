@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
 from http.server import HTTPServer
-from time import sleep
+from time import sleep, time
 from threading import Thread, Event
 
 import requests
@@ -13,11 +13,15 @@ from modules.simple_handler import SimpleHandler
 
 def heartbeat(stop_event, server_ip):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    t = 30 + random.randint(1, 31)
+    last = 0
     while not stop_event.is_set():
-        sock.sendto(b'Alive', (server_ip, 5000))
-        print("Heartbeat sent.") 
-        t = 30 + random.randint(1, 31)
-        sleep(t)
+        if time() < last + t:
+            sock.sendto(b'Alive', (server_ip, 5000))
+            print("Heartbeat sent.") 
+            sleep(t)
+            t = 30 + random.randint(1, 31)
+            last = time()
 
 
 def command_loop(stop_event):
