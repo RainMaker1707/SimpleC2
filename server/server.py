@@ -33,7 +33,7 @@ class SimpleHandler(BaseHTTPRequestHandler):
             self.wfile.write(b"")
 
     def do_POST(self):
-        self.send_response(200)
+        self.send_response(201)
         self.end_headers()
         self.wfile.write(b"")
         length = int(self.headers['content-length'])
