@@ -55,6 +55,7 @@ The URIs used in these HTTP requests are built as described in the following sec
       "javascripts",
       "javascript",
       "jscript",
+      "jscripts",
       "embedded"
    ],
    "ext": "",
@@ -124,7 +125,7 @@ These formats represent which dictionary should be used depending on the extensi
         - `/icons/favicon.png` is a correct example
         - `/api/login.png` is an incorrect example
 
-## Behaviour
+## Behavior
 Once the implant is running on the victim's machine, it starts sending HTTP requests to the C2 server with the GET method using the `.js` extension to mimic a heartbeat.
 
 Upon receiving the first heartbeat, the C2 server knows that an implant is available, so it can start responding to the implant with commands.
